@@ -1,4 +1,6 @@
 name: Continuous Integration
+permissions:
+  contents: read
 on:
     pull_request:
         branches:
@@ -11,8 +13,21 @@ jobs:
         
       - name: Check out repository code
         uses: actions/checkout@v4
-
+        
       - name: Python Lint Code Scanning Action
         uses: advanced-security/python-lint-code-scanning-action@v1.1.2
         with:
             linter: pylint
+  
+
+  discord:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Discord Webhook
+        uses: Sniddl/discord-commits@v1.6
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          template: "avatar-with-link"
+          include-extras: true
